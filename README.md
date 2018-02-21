@@ -1,4 +1,4 @@
-Template
+Import v1
 ========
 Description
 
@@ -10,13 +10,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require --prefer-dist yozh/yii2-template "*"
+php composer.phar require --prefer-dist yozh/yii2-import-v1 "*"
 ```
 
 or add
 
 ```
-"yozh/yii2-template": "*"
+"yozh/yii2-import-v1": "*"
 ```
 
 to the require section of your `composer.json` file.

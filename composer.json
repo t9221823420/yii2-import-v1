@@ -2,7 +2,7 @@
   "name": "yozh/yii2-import-v1",
   "description": "Description",
   "type": "yii2-extension",
-  "keywords": ["yii2","extension","template"],
+  "keywords": ["yii2","extension","import"],
   "license": "MIT",
   "authors": [
     {
@@ -14,7 +14,9 @@
   "minimum-stability": "stable",
   "require": {
     "yozh/yii2-base": "@dev",
-    "yozh/yii2-crud-v1": "@dev"
+    "yozh/yii2-crud-v1": "@dev",
+    "yozh/yii2-product": "@dev",
+    "yozh/yii2-taxonomy": "@dev"
   },
   "extra": {
     "bootstrap": "yozh\\import\\Bootstrap"
