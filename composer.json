@@ -1,0 +1,27 @@
+{
+  "name": "yozh/yii2-import-v1",
+  "description": "Description",
+  "type": "yii2-extension",
+  "keywords": ["yii2","extension","template"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ivan Kryazhev",
+      "email": "t9221823420@gmail.com",
+      "homepage": "https://github.com/t9221823420"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "yozh/yii2-base": "@dev",
+    "yozh/yii2-crud-v1": "@dev"
+  },
+  "extra": {
+    "bootstrap": "yozh\\import\\Bootstrap"
+  },
+  "autoload": {
+    "psr-4": {
+      "yozh\\import\\": "src"
+    }
+  }
+}
