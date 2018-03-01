@@ -19,7 +19,7 @@
     "yozh/yii2-taxonomy": "@dev"
   },
   "extra": {
-    "bootstrap": "yozh\\import\\Bootstrap"
+    "_bootstrap": "yozh\\import\\Bootstrap"
   },
   "autoload": {
     "psr-4": {
