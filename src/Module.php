@@ -4,8 +4,6 @@ namespace yozh\import;
 
 use yii\base\Module as BaseModule;
 
-
-
 class Module extends BaseModule
 {
 
