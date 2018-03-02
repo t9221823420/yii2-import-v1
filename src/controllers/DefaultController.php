@@ -3,8 +3,7 @@
 namespace yozh\import\controllers;
 
 use Yii;
-use yii\web\Controller;
-use yii\filters\AccessControl;
+use yozh\base\controllers\DefaultController as Controller;
 use yii\web\UploadedFile;
 use yozh\import\models\UploadForm;
 use yii\web\Response;
@@ -31,21 +30,6 @@ class DefaultController extends Controller
 	const STATUS_OFF    = 'off';
 	const STATUS_DELETE = 'delete';
 	
-	
-	public function behaviors()
-	{
-		return [
-			'access' => [
-				'class' => AccessControl::className(),
-				'rules' => [
-					[
-						'allow' => true,
-						'roles' => [ '@' ],
-					],
-				],
-			],
-		];
-	}
 	
 	public function actionIndex()
 	{
@@ -107,7 +91,7 @@ class DefaultController extends Controller
 	
 	public function actionProcess()
 	{
-		if( 1 || Yii::$app->request->isAjax ) { //
+		if( Yii::$app->request->isAjax ) { //
 			
 			$session = Yii::$app->session;
 			
@@ -234,28 +218,6 @@ class DefaultController extends Controller
 		}
 		
 		return $process;
-		
-	}
-	
-	protected function _toUTF8( $data )
-	{
-		
-		if( is_array( $data ) ) {
-			
-			foreach( $data as $key => $value ) {
-				$data[ $key ] = $this->_toUTF8( $value );
-			}
-			
-			return $data;
-		}
-		else if( is_string( $data ) ) {
-			
-			return mb_convert_encoding( $data, 'UTF-8', 'WINDOWS-1251' );
-			
-		}
-		else {
-			return $data;
-		}
 		
 	}
 	
@@ -395,6 +357,28 @@ class DefaultController extends Controller
 		}
 		
 		return false;
+		
+	}
+	
+	protected function _toUTF8( $data )
+	{
+		
+		if( is_array( $data ) ) {
+			
+			foreach( $data as $key => $value ) {
+				$data[ $key ] = $this->_toUTF8( $value );
+			}
+			
+			return $data;
+		}
+		else if( is_string( $data ) ) {
+			
+			return mb_convert_encoding( $data, 'UTF-8', 'WINDOWS-1251' );
+			
+		}
+		else {
+			return $data;
+		}
 		
 	}
 	
