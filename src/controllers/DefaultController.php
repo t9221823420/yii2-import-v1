@@ -3,11 +3,14 @@
 namespace yozh\import\controllers;
 
 use Yii;
-use yozh\base\controllers\DefaultController as Controller;
 use yii\web\UploadedFile;
-use yozh\import\models\UploadForm;
 use yii\web\Response;
+use yozh\base\controllers\DefaultController as Controller;
+use yozh\import\models\UploadForm;
+use yozh\product\models\ProductModel;
+use yozh\properties\PropertiesBehavior;
 use yozh\taxonomy\models\Taxonomy;
+use yozh\properties\models\PropertyModel;
 
 class DefaultController extends Controller
 {
@@ -86,6 +89,8 @@ class DefaultController extends Controller
 			}
 			
 		}
+		
+		throw new \yii\web\NotFoundHttpException();
 		
 	}
 	
@@ -221,6 +226,28 @@ class DefaultController extends Controller
 		
 	}
 	
+	protected function _toUTF8( $data )
+	{
+		
+		if( is_array( $data ) ) {
+			
+			foreach( $data as $key => $value ) {
+				$data[ $key ] = $this->_toUTF8( $value );
+			}
+			
+			return $data;
+		}
+		else if( is_string( $data ) ) {
+			
+			return mb_convert_encoding( $data, 'UTF-8', 'WINDOWS-1251' );
+			
+		}
+		else {
+			return $data;
+		}
+		
+	}
+	
 	protected function _process_csv_group( $row_data, &$categories )
 	{
 		$vid        = 1;
@@ -279,6 +306,8 @@ class DefaultController extends Controller
 			$trap = 1;
 		}
 		
+		$specs = [];
+		
 		// формирование характеристик
 		if( $row_data[6] && $spec = explode( "\n", $row_data[6] ) ) {
 			
@@ -288,56 +317,17 @@ class DefaultController extends Controller
 				
 				$data = explode( '=', $data );
 				
-				if( !is_array( $data ) || count( $data ) < 2 ) {
-					$error = 'explode spec line';
-				}
-				
-				if( $error !== false ) {
-					
-					$specs['garbage'][ $error ][] = [
-						'sku'  => $sku,
-						'tid'  => $tid,
-						'data' => $data,
-					];
-					
-				}
-				else {
-					
-					$specName = $data[0];
-					
-					if( !isset( $specs['result'][ $tid ][ $specName ] ) ) {
-						
-						// в этом месте необходимо получить характеристики из предыдущего импорта
-						
-						$specs['result'][ $tid ][ $specName ] = [
-							'enable'         => true,
-							'group'          => 0,
-							'raw values'     => null,
-							'numeric values' => null,
-							'units'          => null,
-						];
-						
-					}
-					
-					$specData = &$specs['result'][ $tid ][ $specName ];
-					
-					$specData['raw values'][] = trim( $this->_escapeRawData( $data[1] ) );
-					
-					if( preg_match( '/(\d+)[,\.]*(\d*)\s*([a-zа-я\/,\.23]*)/i', $data[1], $m ) ) {
-						
-						if( $m[3] ) {
-							$specData['numeric values'][] = $m[2] ? "{$m[1]}.{$m[2]}" : $m[1];
-							$specData['units']            = $m[3];
-						}
-						
-					}
-					
+				if( isset( $data[0] ) && isset( $data[1] ) ) {
+					$specs[ trim( $data[0] ) ] = trim( $data[1] );
 				}
 				
 			}
 			
 		}
 		
+		/**
+		 * @var $product ProductModel
+		 */
 		if( !$product = $modelClass::findOne( $id ) ) {
 			
 			$product = new $modelClass( [
@@ -353,32 +343,19 @@ class DefaultController extends Controller
 		
 		if( $product->save() ) {
 			
+			if( $product->getBehavior( 'properties' ) && count( $specs ) ) {
+				
+				$product->deleteProperties();
+				
+				foreach( $specs as $name => $value ) {
+					$product->setProperties( $name, $value, true, PropertyModel::INPUT_TYPE_STRING );
+				}
+			}
+			
 			return $product;
 		}
 		
 		return false;
-		
-	}
-	
-	protected function _toUTF8( $data )
-	{
-		
-		if( is_array( $data ) ) {
-			
-			foreach( $data as $key => $value ) {
-				$data[ $key ] = $this->_toUTF8( $value );
-			}
-			
-			return $data;
-		}
-		else if( is_string( $data ) ) {
-			
-			return mb_convert_encoding( $data, 'UTF-8', 'WINDOWS-1251' );
-			
-		}
-		else {
-			return $data;
-		}
 		
 	}
 	
