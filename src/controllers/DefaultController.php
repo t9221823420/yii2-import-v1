@@ -10,7 +10,7 @@ use yozh\import\models\UploadForm;
 use yozh\product\models\ProductModel;
 use yozh\properties\PropertiesBehavior;
 use yozh\taxonomy\models\Taxonomy;
-use yozh\properties\models\PropertyModel;
+use yozh\properties\models\PropertiesModel;
 
 class DefaultController extends Controller
 {
