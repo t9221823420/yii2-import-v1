@@ -10,7 +10,7 @@ $vars = [];
 <?php $form = ActiveForm::begin( [ 'options' => [
 	'id' => 'form',
 	'enctype' => 'multipart/form-data',
-	'multiple' => $model->maxFiles > 1 ? true : false,
+	'multiple' => $Model->maxFiles > 1 ? true : false,
 ] ] ) ?>
 
     <div class="form-group">
@@ -19,7 +19,7 @@ $vars = [];
     </div>
 
 
-<?= $form->field( $model, $model->maxFiles > 1 ? 'files[]' : 'files' )->fileInput( [ 'class' => 'btn btn-primary', 'id' => 'files' ] ) ?>
+<?= $form->field( $Model, $Model->maxFiles > 1 ? 'files[]' : 'files' )->fileInput( [ 'class' => 'btn btn-primary', 'id' => 'files' ] ) ?>
 
 <?= Html::submitButton( Yii::t( 'app', 'Upload' ), [ 'class' => 'btn btn-primary hide', 'id' => 'submitButton' ] ) ?>
 

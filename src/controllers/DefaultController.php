@@ -37,10 +37,10 @@ class DefaultController extends Controller
 	public function actionIndex()
 	{
 		
-		$model = new UploadForm( [ 'extensions' => 'csv' ] );
+		$Model = new UploadForm( [ 'extensions' => 'csv' ] );
 		
 		return $this->render( 'index', [
-			'model' => $model,
+			'Model' => $Model,
 		] );
 	}
 	
@@ -49,15 +49,15 @@ class DefaultController extends Controller
 		
 		if( Yii::$app->request->isAjax ) {
 			
-			$model = new UploadForm( [ 'extensions' => 'csv' ] );
+			$Model = new UploadForm( [ 'extensions' => 'csv' ] );
 			
-			$model->files = UploadedFile::getInstance( $model, 'files' );
+			$Model->files = UploadedFile::getInstance( $Model, 'files' );
 			
 			$path = 'uploads/';
 			
-			if( ( $rootNode = ( static::VOCABULARY_CLASSNAME )::find( [ 'name' => static::VOCABULARY_NAME ] )->one() ) && $model->upload( $path ) ) {
+			if( ( $rootNode = ( static::VOCABULARY_CLASSNAME )::find( [ 'name' => static::VOCABULARY_NAME ] )->one() ) && $Model->upload( $path ) ) {
 				
-				$file = $model->files;
+				$file = $Model->files;
 				
 				$rows     = 0;
 				$spl_file = new \SplFileObject( $path . $file->name );
