@@ -34,7 +34,7 @@ class UploadForm extends Model
 		'application/txt',
 	];
 	
-	public function rules()
+	public function rules( $rules = [], $update = false )
 	{
 		
 		switch( $this->extensions ) {
